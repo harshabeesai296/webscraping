@@ -1,0 +1,98 @@
+import requests
+from bs4 import BeautifulSoup
+
+# Getting the URL of the Twitter Home page of Donald Trump
+
+twitter = requests.get('https://twitter.com/katyperry')
+content = twitter.content
+
+# Using the BS4 to parse the HTML content given by the page
+
+twitter_soup = BeautifulSoup(content, 'html.parser')
+twitter_pretty_soup = twitter_soup.prettify()
+
+# Saving the parsed HTML content into a text file
+
+with open('dt_home.txt','wb') as nf:
+    nf.write(twitter_pretty_soup.encode('utf-8'))
+
+# Printing out the name of the official Twitter Handle
+print("The profile we are going to scrape now is of " + twitter_soup.title.string)
+
+# Printing out the basic details of the twitter handle
+
+data = []
+followers = twitter_soup.find_all('span', {'class':'ProfileNav-value'})
+for f in followers:
+    data.append(f.text)
+
+print("The total number of followers of " + twitter_soup.title.string + " are " + data[2])
+print("The total number of people " + twitter_soup.title.string + " is following is " + data[1])
+print("Total number of tweets made by "+ twitter_soup.title.string + " till date are " + data[0].strip())
+
+# To get the Bio of the twitter account
+
+bio = []
+biodata = twitter_soup.find_all('p', {'class':'ProfileHeaderCard-bio u-dir'})
+for f in biodata:
+    bio.append(f.text)
+
+print("The bio of the twitter account is:  " + bio[0])
+
+# To know whether you are following this twitter handle
+
+following_or_not = []
+following = twitter_soup.find_all('span', {'class':'ProfileNav-label'})
+
+for f in following:
+    following_or_not.append(f.text)
+
+if str(following_or_not[1]) == "Following":
+    print("You are following " + twitter_soup.title.string)
+else:
+    print("You are not following " + twitter_soup.title.string)
+
+# To know the location of the person where the account is being operated from
+location = []
+location_person = twitter_soup.find_all('span', {'class':'ProfileHeaderCard-locationText u-dir'})
+
+for f in location_person:
+    location.append(f.text)
+
+print("The location of operation of the account " + twitter_soup.title.string + " is " + location[0].strip())
+
+
+# To know when the person joined Twitter
+
+join_date = []
+join_date_value = twitter_soup.find_all('span', {'class':'ProfileHeaderCard-joinDateText js-tooltip u-dir'})
+
+for f in join_date_value:
+    join_date.append(f.text)
+print(twitter_soup.title.string + " has " + join_date[0])
+
+# To get the Instagram handle of the person
+
+insta = []
+instagram = twitter_soup.find_all('a', {'rel':'me nofollow noopener'})
+
+for f in instagram:
+    insta.append(f.text)
+print(twitter_soup.title.string + " has an Instagram profile as well. the address is " + insta[0].strip())
+
+
+# To get some of the Latest tweets of the account
+
+tweets = []
+tweet = twitter_soup.find_all('p', {'class':'TweetTextSize TweetTextSize--normal js-tweet-text tweet-text'})
+
+for f in tweet:
+    tweets.append(f.text)
+
+print("Some of the recent tweets & retweets by " + twitter_soup.title.string + " are: " + "\n")
+for t in tweets:
+    print(t+"\n")
+    
+    
+    
+    
