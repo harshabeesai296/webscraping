@@ -77,3 +77,40 @@ print("Below is the official descriptiom of the channel:")
 print((str(abt3[0])).encode('utf-8'))
 
 
+cm_playlist = requests.get('https://www.youtube.com/user/AddictedA1/playlists')
+cmp_resp = cm_playlist.content
+cm_soup = BeautifulSoup(cmp_resp,'html.parser')
+cmp_soup = cm_soup.prettify()
+
+with open('cmp.txt','wb') as nf:
+    nf.write(cmp_soup.encode('utf-8'))
+
+
+abt4 = []
+cmpl = cm_soup.findAll('div',attrs ={'class':'yt-lockup-content'})
+for span in cmpl:
+    abt4.append(span.text)
+
+abt4_1 = []
+for i in abt4:
+    abt4_1.append(i.strip())
+
+print("The various playlists in " + name[0] + " channel are: ")
+
+for i in abt4_1:
+    print(i)
+
+abt5 = []
+cmplc = cm_soup.findAll('span',attrs ={'class':'formatted-video-count-label'})
+for span in cmplc:
+    abt5.append(span.text)
+
+abt5_1 = []
+for i in abt5:
+    abt5_1.append(i.strip())
+
+for (i,j) in zip(abt4_1,abt5_1):
+    print("The number of videos in " + i + " are " + j)
+
+
+
