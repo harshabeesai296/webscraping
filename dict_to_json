@@ -1,0 +1,13 @@
+import _pickle as pickle
+import json
+
+resp = requests.get('https://en.wikipedia.org/wiki/Coronavirus_disease_2019')
+with open('covid-19-content.txt','wb') as cv:
+    cv.write(resp.content)
+print(resp.headers)
+json_hdrs = json.dumps(dict(resp.headers))
+
+print(json_hdrs)
+for h in range(len(json_hdrs)):
+    with open('covid-19-hdrs.txt','w') as ch:
+        ch.write(json_hdrs)
