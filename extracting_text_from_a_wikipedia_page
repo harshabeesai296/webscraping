@@ -1,0 +1,21 @@
+import requests
+import urllib3
+import json
+from bs4 import BeautifulSoup
+import sys
+from unidecode import unidecode
+import time
+
+res = requests.get('https://en.wikipedia.org/wiki/Genghis_Khan')
+
+with open('gk.txt', 'wb') as gk:
+    gk.write(res.content)
+
+gktxt = res.text
+mysoup = BeautifulSoup(gktxt, 'html.parser')
+#print(mysoup.prettify().encode('utf-8'))
+txt = []
+for x in range(0,100):
+    txt.append(mysoup.find('p').getText)
+print(txt[0:])
+print(len(txt))
