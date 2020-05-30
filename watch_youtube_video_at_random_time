@@ -1,0 +1,13 @@
+import requests
+import json
+import urllib3
+import random
+
+payload = {'v': 'FrpazflB1Xs','t': str(random.randint(0,360))+'s'}
+yt = requests.get('https://www.youtube.com/watch', params=payload)
+json_hdrs = json.dumps(dict(yt.headers))
+for l in range(len(json_hdrs)):
+    with open('yt.txt','w') as ytfile:
+        ytfile.write(json_hdrs)
+print(yt.headers['Content-Encoding'])
+print(yt.url)
