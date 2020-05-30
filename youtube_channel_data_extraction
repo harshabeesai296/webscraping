@@ -1,0 +1,79 @@
+import requests
+from bs4 import BeautifulSoup
+import html5lib
+
+resp = requests.get('https://www.youtube.com/user/AddictedA1')
+content = resp.content
+
+my_soup = BeautifulSoup(content,'html5lib')
+pretty_soup = my_soup.prettify()
+
+with open('mkbhd.txt','wb') as nf:
+    nf.write(pretty_soup.encode('utf-8'))
+
+print("Name of the YouTube channel is " + my_soup.title.string)
+
+subs = []
+spanlist = my_soup.find_all('span')
+for subsc in my_soup.find_all('span'):
+    subs.append(subsc.get('title'))
+print("No of Subscribers of "+my_soup.title.string + " channel are " + str(subs[154]))
+
+# The ABOUT PAGE
+
+about = requests.get('https://www.youtube.com/user/AddictedA1/about')
+about_soup = BeautifulSoup(about.content,'html.parser')
+about_prettysoup = about_soup.prettify()
+
+with open('cmabout.txt','wb') as nf:
+    nf.write(about_prettysoup.encode('utf-8'))
+
+#cont1 = about_soup.select_one("span.about-stat")
+#ram1 = cont1.select_one("b")
+#print("The number of views on his channel till date are " + ram1.text + " views")
+
+abt = []
+spans = about_soup.findAll('span',attrs ={'class':'about-stat'})
+for span in spans:
+    abt.append(span.text)
+
+print("The number of views on his channel till date are " + abt[0])
+print(my_soup.title.string + " has joined Youtube on " + abt[1])
+
+other_channels = requests.get('https://www.youtube.com/user/AddictedA1/channels')
+othch_soup = BeautifulSoup(other_channels.content, 'html.parser')
+othchpr_soup = othch_soup.prettify()
+
+with open('cmother.txt','wb') as nf:
+    nf.write(othchpr_soup.encode('utf-8'))
+
+oth1 = []
+channels = othch_soup.findAll('a', attrs ={'class':'yt-uix-sessionlink yt-uix-tile-link spf-link yt-ui-ellipsis yt-ui-ellipsis-2'})
+for chan in channels:
+    oth1.append(chan.text)
+
+print("The other channels under the " + my_soup.title.string + " are " + oth1[0])
+
+oth2 = []
+othsub = othch_soup.findAll('span', attrs ={'class':'yt-subscription-button-subscriber-count-unbranded-horizontal yt-uix-tooltip'})
+for chan in othsub:
+    oth2.append(chan.text)
+
+print("The number of subscribers for his other channel " + oth1[0] + " are " + oth2[0])
+
+abt2 = []
+divs = about_soup.findAll('div',attrs ={'class':'country-container branded-page-box-padding'})
+for span in divs:
+    abt2.append(span.text)
+
+print(my_soup.title.string + " is originally from " + str(abt2[0]))
+
+abt3 = []
+pres = about_soup.findAll('div',attrs ={'class':'about-description branded-page-box-padding'})
+for span in pres:
+    abt3.append(span.text)
+
+print("Below is the official descriptiom of the channel:")
+print((str(abt3[0])).encode('utf-8'))
+
+
